@@ -1,0 +1,29 @@
+<.header>
+  Chantier <%= @chantier.id %>
+  <:subtitle>This is a chantier record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/chantiers/#{@chantier}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit chantier</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @chantier.name %></:item>
+  <:item title="Description"><%= @chantier.description %></:item>
+  <:item title="Started at"><%= @chantier.started_at %></:item>
+  <:item title="Ended at"><%= @chantier.ended_at %></:item>
+</.list>
+
+<.back navigate={~p"/chantiers"}>Back to chantiers</.back>
+
+<.modal :if={@live_action == :edit} id="chantier-modal" show on_cancel={JS.patch(~p"/chantiers/#{@chantier}")}>
+  <.live_component
+    module={TaskerWeb.ChantierLive.FormComponent}
+    id={@chantier.id}
+    title={@page_title}
+    action={@live_action}
+    chantier={@chantier}
+    patch={~p"/chantiers/#{@chantier}"}
+  />
+</.modal>

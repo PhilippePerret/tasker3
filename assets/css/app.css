@@ -1,0 +1,20 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@import "app/fonts";
+@import "app/ui";
+
+
+
+button.on {
+  background-color:darkseagreen;
+  color: white;
+  border-color: #555 #CCC #CCC #555;
+  border-width: 4px;
+}
+button.off {
+  background-color: darkgray;
+  border-color:  #CCC #555 #555 #CCC;
+  border-width: 4px;
+}

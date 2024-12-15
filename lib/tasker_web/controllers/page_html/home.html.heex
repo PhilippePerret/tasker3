@@ -1,0 +1,36 @@
+<main class="p-10">
+  
+  <div>
+  <%= if @current_user do %>
+      <.link
+        href={~p"/work"}
+        >DÉBITEUR DE TÂCHES
+      </.link>
+    <% else %>
+      <.link
+      href={~p"/users/log_in"}
+      >S'identifier pour voir ses tâches
+    </.link>
+    <% end %>
+  </div>
+
+  <.link
+    href={~p"/taches"}
+    >Liste des tâches
+  </.link>
+
+  <span> | </span>
+  
+  <.link 
+    href={~p"/chantiers"}
+    >Liste des chantiers
+  </.link>
+
+  <span> | </span>
+
+  <.link 
+    href={~p"/users"}
+    >Liste des travailleurs
+  </.link>
+
+</main>

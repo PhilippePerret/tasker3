@@ -1,0 +1,11 @@
+<h2>Liste des utilisateurs</h2>
+
+<%= for u <- Tasker.Comptes.liste_des_users() do %>
+
+  <div><%= u.pseudo %> (<%= u.email %> — <%= length(u.chantiers) %> chantier(s))</div>
+
+  <%= for ch <- u.chantiers do %>
+    <div>Chantier : <%= ch.name %></div>
+  <% end %>
+
+<% end %>

@@ -1,0 +1,52 @@
+<.header>
+  Liste des tâches
+  <:actions>
+    <.link patch={~p"/taches/new"}>
+      <.button>Nouvelle tâche</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="taches"
+  rows={@streams.taches}
+  row_click={fn {_id, tache} -> JS.navigate(~p"/taches/#{tache}") end}
+>
+  <:col :let={{_id, tache}} label="Titre"><%= tache.titre %></:col>
+  <:col :let={{_id, tache}} label="Chantier"><%= 
+    case tache.chantier do
+      %Ecto.Association.NotLoaded{} -> "---"
+      nil -> "---"
+      c -> if is_map(c), do: c.name, else: "---"
+      end
+  %></:col>
+  
+  <:action :let={{_id, tache}}>  
+    <div class="sr-only">
+      <.link navigate={~p"/taches/#{tache}"}>👀</.link>
+    </div>
+    <.link patch={~p"/taches/#{tache}/edit"}>✍🏽</.link>
+  </:action>
+  <:action :let={{id, tache}}>
+    <.link
+      phx-click={JS.push("rem", value: %{id: tache.id}) |> hide("##{id}")}
+      data-confirm="Êtes-vous certain de vouloir détruire cette tâche ?"
+    >
+    🗑️
+    </.link>
+  </:action>
+</.table>
+
+<.modal 
+	:if={@live_action in [:new, :edit]}
+	id="tache-modal"
+	show on_cancel={JS.patch(~p"/taches")}>
+  <.live_component
+    module={TaskerWeb.TacheLive.FormComponent}
+    id={@tache.id || :new}
+    title={@page_title}
+    action={@live_action}
+    tache={@tache}
+    patch={~p"/taches"}
+  />
+</.modal>

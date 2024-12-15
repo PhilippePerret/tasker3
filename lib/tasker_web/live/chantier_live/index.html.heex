@@ -1,0 +1,47 @@
+<.header>
+  Liste des chantiers
+  <:actions>
+    <.link patch={~p"/chantiers/new"}>
+      <.button>Nouveau chantier…</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="chantiers"
+  rows={@streams.chantiers}
+  row_click={fn {_id, chantier} -> JS.navigate(~p"/chantiers/#{chantier}") end}
+>
+  <:col :let={{_id, chantier}} label="Nom"><%= chantier.name %></:col>
+  
+  <:col :let={{_id, chantier}} label="Démarré le"><%= chantier.started_at %></:col>
+  <:col :let={{_id, chantier}} label="Achevé le"><%= chantier.ended_at %></:col>
+  <:action :let={{_id, chantier}}>
+    <div class="sr-only">
+      <.link navigate={~p"/chantiers/#{chantier}"}>👀</.link>
+    </div>
+    <.link patch={~p"/chantiers/#{chantier}/edit"}>✍🏽</.link>
+  </:action>
+  <:action :let={{id, chantier}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: chantier.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      🗑️
+    </.link>
+  </:action>
+</.table>
+
+<.modal 
+  :if={@live_action in [:new, :edit]} 
+  id="chantier-modal" 
+  show on_cancel={JS.patch(~p"/chantiers")}>
+  <.live_component
+    module={TaskerWeb.ChantierLive.FormComponent}
+    id={@chantier.id || :new}
+    title={@page_title}
+    action={@live_action}
+    chantier={@chantier}
+    patch={~p"/chantiers"}
+  />
+</.modal>

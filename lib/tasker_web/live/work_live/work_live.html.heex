@@ -1,0 +1,117 @@
+<%
+  IO.inspect(@tache, label: "TÂCHE DANS work_live.html.heex")
+%>
+<section 
+  class="tache mb-20"
+  >
+
+  <div class="p-20 text-4xl">
+    <%= @tache.titre %>
+  </div>
+
+  <div class="w-400 right">
+    <label for="elapsed_time">⏲️ Travaillée déjà</label>
+    <span><%= @tache.tache_time.elapsed_time || 0 %> mns</span>
+  </div>
+  
+  <div>
+    Si la tâche défini un temps de travail :
+    temps de travail déjà effectué | temps de travail restant | afficher un message quand on dépasse le temps imparti (la tâche deviendra rouge)
+  </div>
+
+</section>
+
+
+<style type="text/css">
+  button {
+    padding: 4pt 12pt;
+    background-color:steelblue; color:whitesmoke;
+  }
+</style>
+<div>
+
+  <button
+    phx-click="toggle-work"
+    phx-value-state={@travail_on}
+    class={@travail_on && "on" || "off"}
+    style="width:200px;"
+    ><%=@travail_on && "Faire une pause" || "Travailler la tâche"%>
+  </button>
+  
+  <button
+    id="btn-pause"
+    class="hidden"
+    phx-click="pause"
+    data-confirm="Es-tu sûr de vouloir interrompre ?"
+    >Interrompre
+  </button>
+
+  <button
+    id="btn-stop"
+    class="hidden"
+    phx-click="stop"
+    data-confirm="Veux-tu vraiment arrêter de travailler cette tâche ?"
+  >Finir cette tâche
+  </button>
+
+  <button
+    phx-click="set-done"
+    data-confirm="As-tu vraiment terminé cette tâche ?"
+    >La marquer finie
+  </button>
+  
+  </div>
+
+  <!-- Deuxième rangée -->
+  <div class="mt-4">
+
+  <button
+    phx-click="set-just-after"
+    >La travailler après la suivante
+  </button>
+
+  <button
+    phx-click="set-after-alea"
+    >La travailler après (aléatoirement)
+  </button>  
+
+  <button
+    phx-click="set-last"
+    data-confirm="Veux-tu vraiment la mettre à la fin de cette journée ?"
+    >À la fin
+  </button>  
+
+  <button
+    phx-click="set-very-last"
+    data-confirm="Veux-tu vraiment la repousser le plus tard possible ?"
+    >Repousser au plus loin
+  </button>  
+
+</div>
+  
+<div class="mt-4">
+  <button
+    phx-click="edit"
+    >Modifier
+  </button>
+
+  <button
+    phx-click="remove"
+    >Détruire
+  </button>
+
+  <button
+    id="btn-description"
+    class={@description_shown && "on" || "off" }
+    phx-click="toggle-description"
+    phx-value-state={@description_shown}
+  >Description
+  </button>
+
+</div>
+
+<div 
+  id="div-description"
+  class={"mt-10 #{@description_shown || "hidden"}"}>
+  <%= @tache.description || "Description de la tâche" %>
+</div>
