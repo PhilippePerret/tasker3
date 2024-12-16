@@ -35,6 +35,27 @@ phil = Seeds.create_user("Phil", "philippe.perret@yahoo.fr", "xadcaX-huvdo9-xidk
 _benoit = Seeds.create_user("Ben", "benoit.ackerman@yahoo.fr", "1234-56748-abcd")
 _marion = Seeds.create_user("Marion", "marion.michel31@gmail.com", "abcd-xadcaX-zaerf")
 
+# === AUTOENTREPRISE ===
+
+chantier_autoentreprise = Repo.insert!(%Chantier{
+	name: "Autoentreprise",
+	description: "Contient toutes les tâches concernant l'autoentreprise",
+	users: [phil]
+})
+
+# Tâche importante qui doit être fait tous les mois, et qui devient impérative à
+# partir d'une certain date
+Repo.insert!(%Tache{
+	titre: "Déclaration et paiement impôts mensuel",
+	description: "À faire tous les mois",
+	chantier: chantier_autoentreprise,
+	tache_time: %TacheTime{
+		due_every: "0 10 5 * *", # tous les 5 du mois à 10 h 00
+		duration: 30,
+		imperative: {after: 15} # Elle devient impérative 15 jours après son départ
+	}
+})
+
 # === CLIP ===
 
 chantier_rev_clip = Repo.insert!( %Chantier{
@@ -65,16 +86,6 @@ Repo.insert!( %Tache{
 		tache_time: %TacheTime{
 			due_at: ~N"2024-12-09 09:00:00",
 			end_at: ~N"2024-12-09 12:00:00",
-			imperative: true
-		}
-})
-
-Repo.insert!( %Tache{
-		titre: "Réunion pédagogique sur GIMP",
-		description: "Brainstorming sur les exercices à proposer",
-		tache_time: %TacheTime{
-			due_at: ~N"2024-12-12 10:00:00",
-			end_at: ~N"2024-12-12 12:00:00",
 			imperative: true
 		}
 })
